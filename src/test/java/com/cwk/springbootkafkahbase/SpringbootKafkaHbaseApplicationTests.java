@@ -3,7 +3,6 @@ package com.cwk.springbootkafkahbase;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.cwk.springbootkafkahbase.bean.Kafka_RealSync_Event;
-import com.cwk.springbootkafkahbase.config.KafkaConfiguration;
 import com.cwk.springbootkafkahbase.config.KafkaProperties;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.DescribeTopicsResult;
@@ -84,20 +83,20 @@ public class SpringbootKafkaHbaseApplicationTests {
     }
 
 
-    @Autowired
+ /*   @Autowired
     private KafkaConfiguration.KafkaSendResultHandler producerListener;
 
-    /**
+    *//**
      * 用KafkaSendResultHandler实现消息发送结果回调
      *
      * @throws InterruptedException
-     */
+     *//*
     @Test
     public void testProducerListen() throws InterruptedException {
         kafkaTemplate.setProducerListener(producerListener);
         kafkaTemplate.send("topic.quick.demo", "test producer listen");
         Thread.sleep(1000);
-    }
+    }*/
 
     /**
      * KafkaTemplate同步发送消息
@@ -200,12 +199,12 @@ public class SpringbootKafkaHbaseApplicationTests {
     }
 
 
-    @Autowired
+  /*  @Autowired
     private KafkaProperties properties;
 
-    /**
+    *//**
      * @throws InterruptedException
-     */
+     *//*
     @Test
     public void testKafkaProperties() throws InterruptedException {
         System.out.println("###############properties##############");
@@ -216,7 +215,7 @@ public class SpringbootKafkaHbaseApplicationTests {
         );
         System.out.println("###############properties end##############");
         Thread.sleep(60000);
-    }
+    }*/
 
     @Test
     public void testBatch011() throws InterruptedException {
@@ -236,11 +235,15 @@ public class SpringbootKafkaHbaseApplicationTests {
 
     @Test
     public void json2Bean(){
-        String data="{\"batchID\":\"201902151323421550208222708\",\"batchRowCount\":1,\"columnListInfo\":[{\"btype\":15,\"cflag\":64,\"colNum\":0,\"columnName\":\"ID\",\"columnValue\":\"13\",\"dataColNum\":0,\"len\":2,\"oraType\":[0,2],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":0,\"colNum\":1,\"columnName\":\"NAME\",\"columnValue\":\"a13\",\"dataColNum\":1,\"len\":3,\"oraType\":[0,9],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":2,\"columnName\":\"scn_code\",\"columnValue\":\"17398172\",\"dataColNum\":-1,\"len\":8,\"oraType\":[0,2],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":3,\"columnName\":\"scn_time\",\"columnValue\":\"2019-02-15 13:23:32\",\"dataColNum\":-1,\"len\":19,\"oraType\":[0,2],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":4,\"columnName\":\"loadtime\",\"columnValue\":\"2019-02-15 13:23:42\",\"dataColNum\":-1,\"len\":19,\"oraType\":[0,12],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":5,\"columnName\":\"trans_id\",\"columnValue\":\"1688978709293049\",\"dataColNum\":-1,\"len\":16,\"oraType\":[0,2],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":6,\"columnName\":\"seq_id\",\"columnValue\":\"1\",\"dataColNum\":-1,\"len\":1,\"oraType\":[0,2],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":7,\"columnName\":\"ds_rowid\",\"columnValue\":\"AAASSvAAEAAAAlVAAF\",\"dataColNum\":-1,\"len\":18,\"oraType\":[0,1],\"otype\":0,\"rowID\":\"\",\"rowNum\":0}],\"columnNum\":7,\"operation_type\":\"I\",\"owner\":\"X1\",\"rowNum\":0,\"tableName\":\"TEST001\"}";
-        Kafka_RealSync_Event event = JSON.parseObject(data, Kafka_RealSync_Event.class);
+        /*Kafka_RealSync_Event event = JSON.parseObject(data, Kafka_RealSync_Event.class);
         event.updateMetadata();
-        event.updateMetadataMap();
-        System.out.println(event.getMetadata().getMetadataJson());
+        event.updateMetadataMap();*/
+
+        for (int i = 0; i < 5000; i++) {
+            String data="{\"batchID\":\""+System.currentTimeMillis()+"\",\"batchRowCount\":1,\"columnListInfo\":[{\"btype\":15,\"cflag\":64,\"colNum\":0,\"columnName\":\"ID\",\"columnValue\":\"13\",\"dataColNum\":0,\"len\":2,\"oraType\":[0,2],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":0,\"colNum\":1,\"columnName\":\"NAME\",\"columnValue\":\"a13\",\"dataColNum\":1,\"len\":3,\"oraType\":[0,9],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":2,\"columnName\":\"scn_code\",\"columnValue\":\"17398172\",\"dataColNum\":-1,\"len\":8,\"oraType\":[0,2],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":3,\"columnName\":\"scn_time\",\"columnValue\":\"2019-02-15 13:23:32\",\"dataColNum\":-1,\"len\":19,\"oraType\":[0,2],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":4,\"columnName\":\"loadtime\",\"columnValue\":\"2019-02-15 13:23:42\",\"dataColNum\":-1,\"len\":19,\"oraType\":[0,12],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":5,\"columnName\":\"trans_id\",\"columnValue\":\"1688978709293049\",\"dataColNum\":-1,\"len\":16,\"oraType\":[0,2],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":6,\"columnName\":\"seq_id\",\"columnValue\":\"1\",\"dataColNum\":-1,\"len\":1,\"oraType\":[0,2],\"otype\":0,\"rowID\":\"\",\"rowNum\":0},{\"btype\":15,\"cflag\":4,\"colNum\":7,\"columnName\":\"ds_rowid\",\"columnValue\":\"AAASSvAAEAAAAlVAAF\",\"dataColNum\":-1,\"len\":18,\"oraType\":[0,1],\"otype\":0,\"rowID\":\"\",\"rowNum\":0}],\"columnNum\":7,\"operation_type\":\"I\",\"owner\":\"X1\",\"rowNum\":0,\"tableName\":\"TEST001\"}";
+            kafkaTemplate.send("topic-json-test", data);
+        }
+        //System.out.println(event.getMetadata().getMetadataJson());
 
     }
 

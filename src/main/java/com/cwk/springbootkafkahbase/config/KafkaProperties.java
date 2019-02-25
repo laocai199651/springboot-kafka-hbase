@@ -6,6 +6,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.SslConfigs;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -14,8 +15,8 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
 
-
 @Component
+@Configuration
 @ConfigurationProperties(prefix = "spring.kafka.consumer")
 public class KafkaProperties {
     @Value("${spring.kafka.consumer.key-deserializer}")
@@ -98,4 +99,26 @@ public class KafkaProperties {
     public void setServerPort(String serverPort) {
         this.serverPort = serverPort;
     }
+
+    @Bean(name = "getKafkaProperties")
+    public Properties getKafkaProperties() throws ClassNotFoundException {
+        Properties props=new Properties();
+        //连接地址
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,getServers().get((int)Math.round(Math.random()*2))+":"+getServerPort());
+        //GroupID
+        //props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-01");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,getAutoOffSetReset());
+        //是否自动提交
+        //props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+        //自动提交的频率
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, getAutoCommitInterval());
+        //Session超时设置
+        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, getSessionTimeoutMs());
+        //键的反序列化方式
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, Class.forName(getKeyDeserializer()));
+        //值的反序列化方式
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, Class.forName(getValueDeserializer()));
+        return  props;
+    }
+
 }
