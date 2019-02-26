@@ -61,7 +61,7 @@ public class Consumer2Hbase extends Consumer implements Runnable {
         synchronized (String.class) {
             try {
                 //isTableExists.set();
-                if (HbaseUtils.tableExist("TABLE_" + topic)) {
+                if (!HbaseUtils.tableExist("TABLE_" + topic)) {
                     HbaseUtils.createTable("TABLE_" + topic, "COLUMN");
                     logger.info("已建表\t" + "TABLE_" + topic);
                 }
@@ -85,7 +85,11 @@ public class Consumer2Hbase extends Consumer implements Runnable {
                         consumer.commitSync();
                         System.out.println("commit: " + record.offset());
                     }*/
-                    kafkaEventProducer.onData(JSON.parseObject(record.value(), Kafka_RealSync_Event.class), record);
+                    Kafka_RealSync_Event kafkaRealSyncEvent = JSON.parseObject(record.value(), Kafka_RealSync_Event.class);
+                    //kafkaRealSyncEvent.updateMetadata();
+                    //kafkaRealSyncEvent.updateMetadataMap();
+                    kafkaRealSyncEvent.setTimestamp(record.timestamp());
+                    kafkaEventProducer.onData(kafkaRealSyncEvent, record);
                     //consumer.commitSync(Collections.singletonMap(topicPartitions.get(0), new OffsetAndMetadata(record.offset() + 1)));
                 }
             } catch (Exception e) {
